@@ -1,0 +1,14 @@
+.xml-real-estate-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.xml-real-estate-table th, .xml-real-estate-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.xml-real-estate-table th {
+    background-color: #f2f2f2;
+}
