@@ -95,6 +95,20 @@ function getRealEstateTable() {
             return 'Please configure the XML URL in the plugin settings.';
         }
         $xml = simplexml_load_file($url) or die("Error: Cannot create object");
+
+        // Define the mapping from status_id numbers to strings
+        $status_id_map = [
+            '1' => 'Dostępne',
+            '2' => 'Rezerwacja', 
+            '3' => 'Rezerwacja',
+            '4' => 'Sprzedane', 
+            '5' => 'Sprzedane', 
+            '6' => 'Sprzedane',
+            '7' => 'Sprzedane', 
+            '8' => 'Sprzedane', 
+            '9' => 'Sprzedane'
+        ];
+
         $output = '<table class="xml-real-estate-table"><tr>';
         $fields = ['id', 'investment_id', 'investment_name', 'building', 'name', 'local_number', 'status_id', 'status_name', 'area', 'floor', 'completion_date', 'ask_for_price', 'city', 'date_modified', 'type', 'promotion', 'plan_link', 'sold_status'];
         foreach ($fields as $field) {
@@ -108,7 +122,11 @@ function getRealEstateTable() {
             $output .= '<tr>';
             foreach ($fields as $field) {
                 if (get_option($field)) { // Only add data if option is checked
-                    $output .= '<td>' . (isset($realestate->$field) ? $realestate->$field : '') . '</td>';
+                    $fieldValue = isset($realestate->$field) ? (string)$realestate->$field : '';
+                    if ($field == 'status_id' && isset($status_id_map[$fieldValue])) {
+                        $fieldValue = $status_id_map[$fieldValue]; // Apply mapping for status_id
+                    }
+                    $output .= '<td>' . $fieldValue . '</td>';
                 }
             }
             $output .= '</tr>';
@@ -118,6 +136,7 @@ function getRealEstateTable() {
     }
     return $output;
 }
+
 
 
 
