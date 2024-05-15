@@ -14,11 +14,46 @@ function xml_real_estate_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'xml_real_estate_enqueue_styles');
 
+$fieldsXml = [
+    'id', 'investment_id', 'investment_name', 'stage', 'building', 'name', 'local_number', 'status_id', 'status_name',
+    'area', 'area_usable', 'rooms', 'floor', 'administrative_number', 'plot_area', 'completion_date', 'ask_for_price',
+    'city', 'price', 'minimal_price_gross', 'promotion', 'promotion_price', 'pricemkw', 'price_net', 'pricemkw_net',
+    'promotion_price_net', 'promotion_date_from', 'promotion_date_to', 'date_modified', 'type_id', 'type', 'staircase',
+    'description', 'direction', 'balkon', 'balcony_count', 'taras', 'ogrod', 'loggia', 'antresole_area', 'area_attic',
+    'card_link', 'plan_link', 'two_levels', 'virtual_walk', 'dont_send_to_www', 'sold_status', 'turnkey_conditon',
+    'unit_amount_of_co2_emission', 'energy_class', 'share_of_renewable_energy_sources', 'annual_demand_indicator_for_final_energy',
+    'annual_demand_indicator_for_usable_energy', 'annual_demand_indicator_for_non_renewable_primary_energy'
+];
+
+$fieldsDescription = [
+    'ID', 'Investment ID', 'Investment Name', 'Investment Stage', 'Building', 'Name', 'Local Number', 'Status ID', 'Status Name',
+    'Area', 'Usable Area', 'Rooms', 'Floor', 'Administrative Number', 'Plot Area', 'Completion Date', 'Ask for Price',
+    'City', 'Total Price Gross', 'Minimal Price Gross', 'Promotion', 'Promotion Price Gross', 'Price per m² Gross', 'Net Price',
+    'Price per m² Net', 'Promotion Price Net', 'Promotion Start Date', 'Promotion End Date', 'Date Modified', 'Type ID',
+    'Type', 'Staircase', 'Description', 'Direction', 'Balcony Area', 'Balcony Count', 'Terrace Area', 'Garden Area',
+    'Loggia Area', 'Mezzanine Area', 'Attic Area', 'Property Card Link', 'Floor Plan Link', 'Two Levels',
+    'Virtual Walk Link', 'Do Not Send to WWW', 'Sold Status', 'Turnkey Condition', 'CO2 Emission per Unit',
+    'Energy Class', 'Share of Renewable Energy Sources', 'Annual Final Energy Demand', 'Annual Usable Energy Demand',
+    'Annual Non-renewable Primary Energy Demand'
+];
+
+$fields_no_status_id = [
+    'id', 'investment_id', 'investment_name', 'stage', 'building', 'name', 'local_number', 'status_name',
+    'area', 'area_usable', 'rooms', 'floor', 'administrative_number', 'plot_area', 'completion_date', 'ask_for_price',
+    'city', 'price', 'minimal_price_gross', 'promotion', 'promotion_price', 'pricemkw', 'price_net', 'pricemkw_net',
+    'promotion_price_net', 'promotion_date_from', 'promotion_date_to', 'date_modified', 'type_id', 'type', 'staircase',
+    'description', 'direction', 'balkon', 'balcony_count', 'taras', 'ogrod', 'loggia', 'antresole_area', 'area_attic',
+    'card_link', 'plan_link', 'two_levels', 'virtual_walk', 'dont_send_to_www', 'sold_status', 'turnkey_conditon',
+    'unit_amount_of_co2_emission', 'energy_class', 'share_of_renewable_energy_sources', 'annual_demand_indicator_for_final_energy',
+    'annual_demand_indicator_for_usable_energy', 'annual_demand_indicator_for_non_renewable_primary_energy'
+];
+
 // Register settings for custom CSS and XML URL
 function xml_real_estate_register_settings() {
     add_option('xml_real_estate_custom_css', '');
     add_option('xml_real_estate_xml_url', '');
-    $fields = ['id', 'investment_id', 'investment_name', 'building', 'name', 'local_number', 'status_id', 'status_name', 'area', 'floor', 'completion_date', 'ask_for_price', 'city', 'date_modified', 'type', 'promotion', 'plan_link', 'sold_status'];
+    global $fieldsXml;
+    $fields = $fieldsXml;
     foreach ($fields as $field) {
         add_option($field, '0');  // Default value is '0' (unchecked)
         register_setting('xmlRealEstateOptions', $field);
@@ -48,7 +83,8 @@ function xml_real_estate_options_page() {
             <input type="text" name="xml_real_estate_xml_url" style="width:400px;" value="<?php echo esc_attr(get_option('xml_real_estate_xml_url')); ?>" />
             <h3>Select Fields to Display</h3>
             <?php
-            $fields = ['ID', 'Investment ID', 'Investment Name', 'Building', 'Name', 'Local Number', 'Status ID', 'Status Name', 'Area', 'Floor', 'Completion Date', 'Asking For Price', 'City', 'Date Modified', 'Type', 'Promotion', 'Plan Link', 'Sold Status'];
+            global $fieldsDescription;
+            $fields = $fieldsDescription;
             foreach ($fields as $field) {
                 $field_slug = strtolower(str_replace(' ', '_', $field));
                 ?>
@@ -110,7 +146,8 @@ function getRealEstateTable() {
         ];
 
         $output = '<table class="xml-real-estate-table"><tr>';
-        $fields = ['id', 'investment_id', 'investment_name', 'building', 'name', 'local_number', 'status_id', 'status_name', 'area', 'floor', 'completion_date', 'ask_for_price', 'city', 'date_modified', 'type', 'promotion', 'plan_link', 'sold_status'];
+        global $fields_no_status_id;
+        $fields = $fields_no_status_id;
         foreach ($fields as $field) {
             if (get_option($field)) { // Only add header if option is checked
                 $output .= '<th>' . ucwords(str_replace('_', ' ', $field)) . '</th>';
