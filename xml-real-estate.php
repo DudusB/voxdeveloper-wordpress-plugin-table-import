@@ -72,15 +72,52 @@ function getRealEstateTable() {
             return 'Please configure the XML URL in the plugin settings.';
         }
         $xml = simplexml_load_file($url) or die("Error: Cannot create object");
-        $output = '<table class="xml-real-estate-table"><tr><th>ID</th><th>Status</th></tr>';
+
+        // Define table headers for all fields
+        $output = '<table class="xml-real-estate-table">';
+        $output .= '<tr><th>ID</th><th>Investment ID</th><th>Investment Name</th><th>Building</th><th>Name</th><th>Local Number</th>
+                    <th>Status ID</th><th>Status Name</th><th>Area</th><th>Floor</th><th>Completion Date</th><th>Asking For Price</th>
+                    <th>City</th><th>Date Modified</th><th>Type</th><th>Promotion</th><th>Plan Link</th><th>Sold Status</th></tr>';
+
+        // Parse each real estate entry and add rows
         foreach ($xml->realestate as $realestate) {
-            $output .= '<tr><td>' . $realestate->id . '</td><td>' . $realestate->status_name . '</td></tr>';
+            $output .= '<tr>';
+            $output .= '<td>' . $realestate->id . '</td>';
+            $output .= '<td>' . $realestate->investment_id . '</td>';
+            $output .= '<td>' . $realestate->investment_name . '</td>';
+            $output .= '<td>' . $realestate->building . '</td>';
+            $output .= '<td>' . $realestate->name . '</td>';
+            $output .= '<td>' . $realestate->local_number . '</td>';
+            $output .= '<td>' . $realestate->status_id . '</td>';
+            $output .= '<td>' . $realestate->status_name . '</td>';
+            $output .= '<td>' . $realestate->area . '</td>';
+            $output .= '<td>' . $realestate->floor . '</td>';
+            $output .= '<td>' . $realestate->completion_date . '</td>';
+            $output .= '<td>' . ($realestate->ask_for_price == '1' ? 'Yes' : 'No') . '</td>';
+            $output .= '<td>' . $realestate->city . '</td>';
+            $output .= '<td>' . $realestate->date_modified . '</td>';
+            $output .= '<td>' . $realestate->type . '</td>';
+            $output .= '<td>' . ($realestate->promotion == '1' ? 'Yes' : 'No') . '</td>';
+            $output .= '<td>';
+            if (isset($realestate->plan_link)) {
+                foreach ($realestate->plan_link as $link) {
+                    $output .= '<a href="' . $link . '">' . $link . '</a><br>';
+                }
+            }
+            $output .= '</td>';
+            $output .= '<td>' . ($realestate->sold_status == '1' ? 'Sold' : 'Available') . '</td>';
+            $output .= '</tr>';
         }
+
         $output .= '</table>';
+
+        // Cache the generated table for 1 hour
         set_transient('realestate_table', $output, HOUR_IN_SECONDS);
     }
+
     return $output;
 }
+
 
 add_shortcode('realestate_table', 'getRealEstateTable');
 ?>
