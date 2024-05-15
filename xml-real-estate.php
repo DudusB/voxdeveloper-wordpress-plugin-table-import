@@ -60,6 +60,9 @@ function xml_real_estate_register_settings() {
     }
     register_setting('xmlRealEstateOptions', 'xml_real_estate_custom_css');
     register_setting('xmlRealEstateOptions', 'xml_real_estate_xml_url');
+
+    add_option('xml_real_estate_column_order', ''); // Default value is empty
+    register_setting('xmlRealEstateOptions', 'xml_real_estate_column_order');
 }
 add_action('admin_init', 'xml_real_estate_register_settings');
 
@@ -79,13 +82,14 @@ function xml_real_estate_options_page() {
             <?php settings_fields('xmlRealEstateOptions'); ?>
             <h3>Custom CSS</h3>
             <textarea name="xml_real_estate_custom_css" style="width:400px;height:150px;"><?php echo get_option('xml_real_estate_custom_css'); ?></textarea>
+            
             <h3>XML URL</h3>
             <input type="text" name="xml_real_estate_xml_url" style="width:400px;" value="<?php echo esc_attr(get_option('xml_real_estate_xml_url')); ?>" />
+            
             <h3>Select Fields to Display</h3>
             <?php
             global $fieldsDescription;
-            $fields = $fieldsDescription;
-            foreach ($fields as $field) {
+            foreach ($fieldsDescription as $field) {
                 $field_slug = strtolower(str_replace(' ', '_', $field));
                 ?>
                 <div>
@@ -95,8 +99,13 @@ function xml_real_estate_options_page() {
                 <?php
             }
             ?>
+
+            <h3>Column Order</h3>
+            <input type="text" name="xml_real_estate_column_order" value="<?php echo esc_attr(get_option('xml_real_estate_column_order')); ?>" placeholder="id, name, status_id, etc.">
+
             <p><input type="submit" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
         </form>
+
         <!-- Refresh Data Form with Nonce -->
         <form method="post">
             <?php wp_nonce_field('refresh_data_nonce', 'refresh_data_field'); ?>
@@ -106,6 +115,8 @@ function xml_real_estate_options_page() {
     </div>
     <?php
 }
+
+
 
     
 // Admin initialization to handle the refresh data action
@@ -125,7 +136,11 @@ add_action('admin_init', 'xml_real_estate_admin_init');
 
 
 function getRealEstateTable() {
+    global $fieldsXml;
     $url = get_option('xml_real_estate_xml_url', 'default-URL-if-not-set');
+    $column_order = get_option('xml_real_estate_column_order');
+    $order = array_map('trim', explode(',', $column_order));
+
     if (false === ($output = get_transient('realestate_table'))) {
         if (empty($url)) {
             return 'Please configure the XML URL in the plugin settings.';
