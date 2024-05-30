@@ -73,6 +73,7 @@ function getRealEstateTable() {
         }
         $xml = simplexml_load_file($url) or die("Error: Cannot create object");
 
+        // Define the status_id mapping array within function scope
         $status_id_map = [
             '1' => 'Dostępny',
             '2' => 'Rezerwacja',
@@ -89,16 +90,17 @@ function getRealEstateTable() {
         $output = '<table class="xml-real-estate-table">';
         $output .= '<tr><th>Lokal</th><th>Status</th><th>Powierzchnia uż.</th><th>Cena</th><th>Karta lokalu</th></tr>';
 
-        // Parse each real estate entry and add rows
+        // Parse each real estate entry and add rows only for type_id 1 or 16
         foreach ($xml->realestate as $realestate) {
-            $output .= '<tr>';
-            $output .= '<td>' . (!empty($realestate->name) ? $realestate->name : '-') . '</td>';
-            $output .= '<td>' . (!empty($realestate->status_id) && array_key_exists((string)$realestate->status_id, $status_id_map) ? $status_id_map[(string)$realestate->status_id] : '-') . '</td>';
-            $output .= '<td>' . (!empty($realestate->area) ? $realestate->area : '-') . '</td>';
-            $output .= '<td>' . (!empty($realestate->price) ? $realestate->price : '-') . '</td>';
-            $output .= '<td>' . (!empty($realestate->card_link) ? '<a href="' . $realestate->card_link . '">Karta lokalu ' . htmlspecialchars($realestate->name) . '</a>' : '-') . '</td>';
-            $output .= '</tr>';
-            $
+            if ((string)$realestate->type_id === '1' || (string)$realestate->type_id === '16') {  // Check type_id
+                $output .= '<tr>';
+                $output .= '<td>' . (!empty($realestate->name) ? $realestate->name : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->status_id) && array_key_exists((string)$realestate->status_id, $status_id_map) ? $status_id_map[(string)$realestate->status_id] : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->area) ? $realestate->area : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->price) ? $realestate->price : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->card_link) ? '<a href="' . $realestate->card_link . '">Karta lokalu ' . htmlspecialchars($realestate->name) . '</a>' : '-') . '</td>';
+                $output .= '</tr>';
+            }
         }
 
         $output .= '</table>';
@@ -108,6 +110,7 @@ function getRealEstateTable() {
     }
     return $output;
 }
+
 
 
 

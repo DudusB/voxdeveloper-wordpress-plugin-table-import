@@ -1,14 +1,19 @@
-.xml-real-estate-table {
-    width: 100%;
-    border-collapse: collapse;
+table.xml-real-estate-table {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto !important;
+    max-width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 5 px 0 !important;
 }
 
-.xml-real-estate-table th, .xml-real-estate-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
+table.xml-real-estate-table th,
+table.xml-real-estate-table td {
+    border: 1px solid #ccc !important;
+    padding: 8px !important;
+    text-align: left !important;
 }
 
-.xml-real-estate-table th {
-    background-color: #f2f2f2;
+table.xml-real-estate-table th {
+    background-color: #f4f4f4 !important;
 }
