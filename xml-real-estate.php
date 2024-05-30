@@ -87,23 +87,6 @@ function xml_real_estate_options_page() {
             
             <h3>XML URL</h3>
             <input type="text" name="xml_real_estate_xml_url" style="width:400px;" value="<?php echo esc_attr(get_option('xml_real_estate_xml_url')); ?>" />
-            
-            <h3>Select Fields to Display</h3>
-            <?php
-            global $fieldsDescription;
-            foreach ($fieldsDescription as $field) {
-                $field_slug = strtolower(str_replace(' ', '_', $field));
-                ?>
-                <div>
-                    <input type="checkbox" id="<?php echo $field_slug; ?>" name="<?php echo $field_slug; ?>" value="1" <?php checked(1, get_option($field_slug), true); ?>>
-                    <label for="<?php echo $field_slug; ?>"><?php echo $field; ?></label>
-                </div>
-                <?php
-            }
-            ?>
-
-            <h3>Column Order</h3>
-            <input type="text" name="xml_real_estate_column_order" value="<?php echo esc_attr(get_option('xml_real_estate_column_order')); ?>" placeholder="id, name, status_id, etc.">
 
             <p><input type="submit" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
         </form>
