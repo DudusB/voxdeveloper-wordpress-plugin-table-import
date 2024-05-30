@@ -14,7 +14,9 @@ function xml_real_estate_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'xml_real_estate_enqueue_styles');
 
-$fieldsXml = [
+$fieldsXml = [ 'name' , 'status_id' , 'area_usable', 'price' , 'card_link'];
+$fields_no_status_id = [ 'Lokal' , 'Status', 'Powierzchnia' , 'Cena' , 'Karta lokalu'];
+$fieldsXml2 = [
     'id', 'investment_id', 'investment_name', 'stage', 'building', 'name', 'local_number', 'status_id', 'status_name',
     'area', 'area_usable', 'rooms', 'floor', 'administrative_number', 'plot_area', 'completion_date', 'ask_for_price',
     'city', 'price', 'minimal_price_gross', 'promotion', 'promotion_price', 'pricemkw', 'price_net', 'pricemkw_net',
@@ -37,7 +39,7 @@ $fieldsDescription = [
     'Annual Non-renewable Primary Energy Demand'
 ];
 
-$fields_no_status_id = [
+$fields_no_status_id2 = [
     'id', 'investment_id', 'investment_name', 'stage', 'building', 'name', 'local_number', 'status_name',
     'area', 'area_usable', 'rooms', 'floor', 'administrative_number', 'plot_area', 'completion_date', 'ask_for_price',
     'city', 'price', 'minimal_price_gross', 'promotion', 'promotion_price', 'pricemkw', 'price_net', 'pricemkw_net',
