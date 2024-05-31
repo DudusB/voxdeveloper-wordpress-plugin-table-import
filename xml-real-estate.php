@@ -132,41 +132,34 @@ function getRealEstateTable() {
         }
         $xml = simplexml_load_file($url) or die("Error: Cannot create object");
 
-        // Define the mapping from status_id numbers to strings
+        // Define the status_id mapping array within function scope
         $status_id_map = [
-            '1' => 'Dostępne',
-            '2' => 'Rezerwacja', 
+            '1' => 'Dostępny',
+            '2' => 'Rezerwacja',
             '3' => 'Rezerwacja',
-            '4' => 'Sprzedane', 
-            '5' => 'Sprzedane', 
+            '4' => 'Sprzedane',
+            '5' => 'Sprzedane',
             '6' => 'Sprzedane',
-            '7' => 'Sprzedane', 
-            '8' => 'Sprzedane', 
+            '7' => 'Sprzedane',
+            '8' => 'Sprzedane',
             '9' => 'Sprzedane'
         ];
 
-        $output = '<table class="xml-real-estate-table"><tr>';
-        global $fields_no_status_id;
-        $fields = $fields_no_status_id;
-        foreach ($fields as $field) {
-            if (get_option($field)) { // Only add header if option is checked
-                $output .= '<th>' . ucwords(str_replace('_', ' ', $field)) . '</th>';
-            }
-        }
-        $output .= '</tr>';
+        // Define table headers for all fields
+        $output = '<table class="xml-real-estate-table">';
+        $output .= '<tr><th>Lokal</th><th>Status</th><th>Powierzchnia uż.</th><th>Cena</th><th>Karta lokalu</th></tr>';
 
+        // Parse each real estate entry and add rows only for type_id 1 or 16
         foreach ($xml->realestate as $realestate) {
-            $output .= '<tr>';
-            foreach ($fields as $field) {
-                if (get_option($field)) { // Only add data if option is checked
-                    $fieldValue = isset($realestate->$field) ? (string)$realestate->$field : '';
-                    if ($field == 'status_id' && isset($status_id_map[$fieldValue])) {
-                        $fieldValue = $status_id_map[$fieldValue]; // Apply mapping for status_id
-                    }
-                    $output .= '<td>' . $fieldValue . '</td>';
-                }
+            if ((string)$realestate->type_id === '1' || (string)$realestate->type_id === '16') {  // Check type_id
+                $output .= '<tr>';
+                $output .= '<td>' . (!empty($realestate->name) ? $realestate->name : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->status_id) && array_key_exists((string)$realestate->status_id, $status_id_map) ? $status_id_map[(string)$realestate->status_id] : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->area) ? $realestate->area : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->price) ? $realestate->price : '-') . '</td>';
+                $output .= '<td>' . (!empty($realestate->card_link) ? '<a href="' . $realestate->card_link . '">Karta lokalu ' . htmlspecialchars($realestate->name) . '</a>' : '-') . '</td>';
+                $output .= '</tr>';
             }
-            $output .= '</tr>';
         }
         $output .= '</table>';
         set_transient('realestate_table', $output, HOUR_IN_SECONDS);
