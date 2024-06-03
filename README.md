@@ -1,7 +1,7 @@
 # VoxCrm-Xml-Import
 
 Unofficial plugin to import data from CRM [VOX Developer](https://voxdeveloper.com/)  to Wordpress website and publish as html table.
-Tested with Wordpress 6.5.3. Use tag "[realestate_table]" in html on the website to show the table at selected part of the page.
+Tested with Wordpress 6.5.3. Use short code "[realestate_table]" in html on the website to show the table at selected part of the page.
 Plugin supports:
 
 - import of table from one url
@@ -15,6 +15,7 @@ Plugin supports:
 - data is automatically cached for one hour and then refreshed
 - data can be manually imported in setting pressing on refresh data
 
+To install go to release page, download zip, add it manually to plugins in wordpress, turn on, configure the url and press "zapisz zmiany" (save), add short code to your page.
 Preview of published table and setting page:
 
 <img width="485" alt="Zrzut ekranu 2024-06-3 o 21 49 32" src="https://github.com/DudusB/VoxCrm-Xml-Import/assets/56642356/6388ca41-02e3-4e1d-b372-eb6181df6057">
