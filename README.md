@@ -6,12 +6,14 @@ Plugin supports:
 
 - import of table from one url
 - displays fields: 
-1. name
-2. status_id as (Dostępny, Rezerwacja, Sprzedane)
-3. area
-4. price
-5. card_link
+    1. name
+    2. status_id as (Dostępny, Rezerwacja, Sprzedane)
+    3. area
+    4. price
+    5. card_link
 - custom .css
+- data is automatically cached for one hour and then refreshed
+- data can be manually imported in setting pressing on refresh data
 
 Preview of published table and setting page:
 
