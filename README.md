@@ -14,6 +14,7 @@ Plugin supports:
 - custom .css
 
 Preview of published table and setting page:
+
 <img width="485" alt="Zrzut ekranu 2024-06-3 o 21 49 32" src="https://github.com/DudusB/VoxCrm-Xml-Import/assets/56642356/6388ca41-02e3-4e1d-b372-eb6181df6057">
 
 <img width="506" alt="Zrzut ekranu 2024-06-3 o 21 49 55" src="https://github.com/DudusB/VoxCrm-Xml-Import/assets/56642356/bf2d1dfd-3418-420f-badb-9ce7436b4a65">
